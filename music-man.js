@@ -1,20 +1,3 @@
-var MusicMan = {
-
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 /*  SHA-256 implementation in JavaScript                              (c) Chris Veness 2002-2014  */
 /*                                                                                                */
@@ -181,3 +164,62 @@ if (typeof String.prototype.utf8Decode == 'undefined') {
       /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 if (typeof module != 'undefined' && module.exports) module.exports = Sha256; // CommonJs export
 if (typeof define == 'function' && define.amd) define([], function() { return Sha256; }); // AMD
+
+
+
+
+// ---------------------------------------------
+// ---------------------------------------------
+
+var MusicMan = {
+  hash: function(to_hash) {
+    return Sha256.hash(to_hash.toString());
+  },
+  convertToBase: function(number, base) {
+    return number.toString(base);
+  },
+  getIntValue: function(string, base) {
+    return parseInt(string, base);
+  },
+  convertToPitches: function(string) {
+    var base16 = this.hash(string);
+    var number = this.getIntValue(base16, 16);
+    var base12 = this.convertToBase(number, 12);
+    var digits = base12.toString().split('');
+
+    var pitches = [];
+    for (var i = 0; i < digits.length; i++) {
+      pitches.push(this.numberSharpPitchMap[digits[i]]);
+    };
+
+    return pitches;
+  },
+  numberSharpPitchMap: {
+    "0" : "C",
+    "1" : "C#",
+    "2" : "D",
+    "3" : "D#",
+    "4" : "E",
+    "5" : "F",
+    "6" : "F#",
+    "7" : "G",
+    "8" : "G#",
+    "9" : "A",
+    "a" : "A#",
+    "b" : "B"
+  },
+  numberFlatsPitchMap: {
+    "0" : "C",
+    "1" : "Db",
+    "2" : "D",
+    "3" : "Eb",
+    "4" : "E",
+    "5" : "F",
+    "6" : "Gb",
+    "7" : "G",
+    "8" : "Ab",
+    "9" : "A",
+    "a" : "Bb",
+    "b" : "B"
+  }
+};
